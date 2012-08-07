@@ -1,0 +1,70 @@
+(load "pmatch.scm")
+
+;;; handling
+;;; boolean numbers variables lambda application zero? sub1
+;;; implemented as data structure
+
+;;; env is implemented as associated list
+(define env '())
+(define extend-env
+  (lambda (names vals env)
+    (cond [(null? names) env]
+          [else
+           (cons
+            (cons (car names) (car vals))
+            (extend-env (cdr names) (cdr vals) env))])))
+(define lookup-in-env
+  (lambda (name env)
+    (let [(val (assoc name env))]
+      (cond [(pair? val) (cdr val)]
+            [else (error 'lookup-in-env "not found" name)]))))
+
+;;; closure is structured as (formals body)
+(define make-closure
+  (lambda (formals body)
+    (list 'closure formals body)))
+(define formals-of
+  (lambda (closure)
+    (cadr closure)))
+(define body-of
+  (lambda (closure)
+    (caddr closure)))
+
+;;; apply in a closure
+(define applying
+  (lambda (closure vals env)
+    (value-of (body-of closure)
+              (extend-env (formals-of closure) vals env))))
+;;; get values of a list
+(define val-list
+  (lambda (names env)
+    (cond [(null? names) (quote ())]
+          [else
+           (cons (value-of (car names) env)
+                 (val-list (cdr names) env))])))
+
+(define value-of
+  (lambda (e env)
+    (pmatch `(,e)
+      ; booleans and numbers
+      [(,a) (guard (or (eq? a #f) (eq? a #t) (number? a)))
+       a]
+      ; variables
+      [(,a) (guard (symbol? a))
+       (lookup-in-env a env)]
+      ; lambda
+      [((lambda ,formals ,body))
+       (make-closure formals body)]
+      ; zero? sub1
+      [((,func . ,args)) (guard (atom? func))
+       (cond [(eq? func 'zero?)
+              (zero? (value-of (car args) env))]
+             [(eq? func 'sub1)
+              (sub1 (value-of (car args) env))]
+             [else
+              (error 'value-of "function not found" func)])]
+      ; application
+      [((,app . ,args))
+       (let [(closure (value-of app env))
+             (vals    (val-list args env))]
+         (applying closure vals env))])))
