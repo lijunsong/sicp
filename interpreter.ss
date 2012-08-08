@@ -13,6 +13,17 @@
            (cons
             (cons (car names) (car vals))
             (extend-env (cdr names) (cdr vals) env))])))
+;;; helper function to extend env using variables binded in let
+;;; this implementation is sort of unefficient.
+(define let-extend-env
+  (lambda (let-binding env)
+    (cond [(null? let-binding) env]
+          [else
+            (let-extend-env
+             (cdr let-binding)
+             (extend-env (list (car (car let-binding)))
+                         (list (value-of (cadr (car let-binding)) env))
+                         env))])))
 (define lookup-in-env
   (lambda (name env)
     (let [(val (assoc name env))]
@@ -62,6 +73,10 @@
                 (value-of (cadr args) env)]
                [(not (null? (cddr args))) ;else part
                 (value-of (caddr args) env)]))]
+      [((let . ,args))
+       (let [(binding-env (let-extend-env (car args) env))
+             (body (cadr args))]
+         (value-of body binding-env))]
       ; zero? sub1 *
       [((,func . ,args)) (guard (atom? func))
        (cond [(eq? func 'zero?)
