@@ -1,7 +1,7 @@
 (load "pmatch.scm")
 
 ;;; handling
-;;; boolean numbers variables lambda application zero? sub1
+;;; boolean numbers variables lambda application zero? sub1 * if
 ;;; implemented as data structure
 
 ;;; env is implemented as associated list
@@ -55,16 +55,29 @@
       ; lambda
       [((lambda ,formals ,body))
        (make-closure formals body)]
-      ; zero? sub1
+      ; if
+      [((if . ,args))
+       (let [(condition (value-of (car args) env))]
+         (cond [condition
+                (value-of (cadr args) env)]
+               [(not (null? (cddr args))) ;else part
+                (value-of (caddr args) env)]))]
+      ; zero? sub1 *
       [((,func . ,args)) (guard (atom? func))
        (cond [(eq? func 'zero?)
               (zero? (value-of (car args) env))]
              [(eq? func 'sub1)
               (sub1 (value-of (car args) env))]
+             [(eq? func '*)
+              (* (value-of (car args) env)
+                 (value-of (cadr args) env))]
              [else
               (error 'value-of "function not found" func)])]
       ; application
       [((,app . ,args))
        (let [(closure (value-of app env))
              (vals    (val-list args env))]
-         (applying closure vals env))])))
+         (applying closure vals env))]
+      [else
+       (error 'value-of "unkown" e)])))
+

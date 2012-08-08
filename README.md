@@ -1,1 +1,1 @@
-an simple interpreter which is implemented by scheme.
+a simple interpreter which is implemented by scheme.
