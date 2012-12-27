@@ -1,1 +1,1 @@
-a simple interpreter which is implemented by scheme.
+repository for PL and interpreter study
