@@ -4,21 +4,21 @@
   [plusS (l : ArithS) (r : ArithS)]
   [multS (l : ArithS) (r : ArithS)]
   [idS (id : symbol)]
-  [appS (name : symbol) (arg : ArithS)]
+  [appS (name : ArithS) (arg : ArithS)]
   [uminusS (e : ArithS)]
   [minusS (l : ArithS) (r : ArithS)])
 
 (define-type ExprC
   [numC (n : number)]
   [plusC (l : ExprC) (r : ExprC)]
-  [appC (name : symbol) (arg : ExprC)]
-  [fdC (arg : symbol) (body : ExprC)]  
+  [appC (name : ExprC) (arg : ExprC)]
+  [lamC (arg : symbol) (body : ExprC)]  
   [idC (id : symbol)]
   [multC (l : ExprC) (r : ExprC)])
 
 (define-type CVal 
   [numV (n : number)]
-  [funcV (arg : symbol) (body : ExprC)]
+  [closureV (arg : symbol) (body : ExprC) (env : Env)]
   )
 
 (define-type-alias Env (hashof symbol CVal))
@@ -37,7 +37,7 @@
                     [else
                      (minusS (parse (second lst)) (parse (third lst)))])]
          [else 
-          (appS (s-exp->symbol (first lst))
+          (appS (idS (s-exp->symbol (first lst)))
                 (parse (second lst)))]))]
     [else (error 'parse "invalid outpur")]))
 
@@ -46,7 +46,7 @@
     [numS (n) (numC n)]
     [idS (id) (idC id)]
     [appS (name arg)
-          (appC name (desugar arg))]
+          (appC (desugar name) (desugar arg))]
     [plusS (l r) (plusC (desugar l) (desugar r))]
     [multS (l r) (multC (desugar l) (desugar r))]
     [uminusS (e) (multC (numC -1) (desugar e))]
@@ -58,28 +58,40 @@
     (some (v) v)
     (none () (error 'lookup "identifier not found"))))
 
-;;; problem
+(define (num+ [l : CVal] [r : CVal]) : CVal
+  (cond ((and (numV? l) (numV? r))
+         (numV (+ (numV-n l) (numV-n r))))
+        (else (error 'interp "type error."))))
+
+(define (num* [l : CVal] [r : CVal]) : CVal
+  (cond ((and (numV? l) (numV? r))
+         (numV (* (numV-n l) (numV-n r))))
+        (else (error 'interp "type error."))))
+
+;;; 
 (define (interp [a : ExprC] [env : Env]) : CVal
   (type-case ExprC a
-    [numC (n) n]
+    [numC (n) (numV n)]
     [plusC (l r)
-           (+ (interp l env) (interp r env))]
+           (num+ (interp l env) (interp r env))]
     [multC (l r)
-           (* (interp l env) (interp r env))]
+           (num* (interp l env) (interp r env))]
     [idC (id)
          (lookup id env)]
-    [fdC (arg body)
-         (error 'interp "you cannot interp fdC directly")]
+    [lamC (arg body)
+         (closureV arg body env)]
     [appC (name arg)
           (let* ((arg-val (interp arg env))
-                 (func (lookup name env)) ;should be fdC
-                 (func-arg (fdC-arg func))
-                 (func-body (fdC-body func)))
-            (interp func-body
-                    (hash-set env func-arg arg-val)))]))
+                 (lam (interp name env))
+                 (lam-arg (closureV-arg lam))
+                 (lam-body (closureV-body lam)))
+            (interp lam-body
+                    (hash-set (closureV-env lam) lam-arg arg-val)))]))
 
-;;; test
-;(interp (desugar (parse '(double 3))) 
-;          (hash empty)
-;          (list (fdC 'double 'x (multC (numC 2) (idC 
-;                                                 'x)))))
+;;; fix test broken
+(interp (appC
+         (appC
+          (lamC 'x (lamC 'y (plusC (idC 'y) (idC 'x))))
+          (numC 2))
+         (numC 3))
+        (hash empty))
