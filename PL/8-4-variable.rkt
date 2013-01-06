@@ -1,4 +1,8 @@
 #lang plai-typed
+
+;;; add variable(varC) to interpreter
+;;; add set and seq to interpreter.
+
 (define-type ExprC
   [numC (n : number)]
   [plusC (l : ExprC) (r : ExprC)]
