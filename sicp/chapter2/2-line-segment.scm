@@ -34,5 +34,12 @@
                     (y-point (end-segment segment)))
                  2)))
 
-; (print-point (midpoint-segment (make-segment (make-point 1 3) (make-point 4 5))))
+;;; tests begin
+(load "../testframe.scm")
+
+;;; the midpoint of points (1, 3) and (4, 5) is (5/2, 4)
+(assert-output-equal
+ "\n(5/2,4)"
+ (print-point (midpoint-segment (make-segment (make-point 1 3) (make-point 4 5)))))
+
 

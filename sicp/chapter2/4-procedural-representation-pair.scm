@@ -1,9 +1,15 @@
-(define (cons x y)
+(define (new-cons x y)
   (lambda (m) (m x y)))
 
-(define (car z)
+(define (new-car z)
   (z (lambda (x y) x)))
 
 ;; the corresponding definition of cdr:
-(define (cdr z)
+(define (new-cdr z)
   (z (lambda (x y) y)))
+
+;;; tests begin
+(load "../testframe.scm")
+
+(asserteq? (new-car (new-cons 'a 'b)) 'a)
+(asserteq? (new-cdr (new-cons 'a 'b)) 'b)

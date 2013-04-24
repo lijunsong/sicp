@@ -7,7 +7,7 @@
   (* (length retangle)
      (width retangle)))
 
-;;; finally the data struct
+;;; then the data struct
 ;;; retangle
 ;;  A  +-------------------+ D
 ;;     |                   |
@@ -47,10 +47,12 @@
   (cdr point))
 
 
-;;; test
+;;; tests begin
+(load "../testframe.scm")
+
 (let* ((A (make-point 1 3))
        (C (make-point 8 1))
-       (rec (make-retangle A C)))
-  (display (perimeter rec))
-  (newline)
-  (display (area rec)))
+       (ret (make-retangle A C)))
+  (begin
+    (assert= 18 (perimeter ret))
+    (assert= 14 (area ret))))

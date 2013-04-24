@@ -1,3 +1,5 @@
+(load "7-interval-selector.scm")
+(load "10-interval-spans-zero.scm")
 
 (define (make-center-percent c p)
   (make-interval (- c (* c p))
@@ -16,3 +18,17 @@
 
 (define (width i)
   (/ (- (upper-bound i) (lower-bound i)) 2))
+
+;;; tests begin
+(load "../testframe.scm")
+
+;; make sure percent procedure produces the right tolerance
+(assert= (percent (make-center-percent 10 0.125)) 0.125)
+(assert= (percent (make-center-width 10 1.25)) 0.125)
+
+;; make sure center and width are right
+(assert= (center (make-center-percent 10 0.111)) 10)
+(assert= (center (make-center-width 10 0.1)) 10)
+(assert= (width (make-center-percent 10 0.1)) 1)
+(assert= (width (make-center-width 10 1)) 1)
+

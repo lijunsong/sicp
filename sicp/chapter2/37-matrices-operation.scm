@@ -12,6 +12,7 @@
 
 ; (matrix-*-vector matrix '(1 2 3 4))
 (load "36-accumulate-n.scm")
+
 (define (transpose mat)
   (accumulate-n cons '() mat))
 

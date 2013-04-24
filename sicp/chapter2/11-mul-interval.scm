@@ -1,0 +1,90 @@
+(load "7-interval-selector.scm")
+
+(define (origin-mul-interval x y)
+  (let ((p1 (* (lower-bound x) (lower-bound y)))
+        (p2 (* (lower-bound x) (upper-bound y)))
+        (p3 (* (upper-bound x) (lower-bound y)))
+        (p4 (* (upper-bound x) (upper-bound y))))
+    (make-interval (min p1 p2 p3 p4)
+                   (max p1 p2 p3 p4))))
+
+(define (mul-interval x y)
+  (define (both-pos? z)
+    (and (> (lower-bound z) 0)
+         (> (upper-bound z) 0)))
+  (define (both-neg? z)
+    (and (< (lower-bound z) 0)
+         (< (upper-bound z) 0)))
+  (define (neg-pos? z)
+    (and (< (lower-bound z) 0)
+         (> (upper-bound z) 0)))
+  (let ((lower-x (lower-bound x))
+        (upper-x (upper-bound x))
+        (lower-y (lower-bound y))
+        (upper-y (upper-bound y)))
+    (cond ((and (both-pos? x) (both-pos? y))
+           (make-interval (* lower-x lower-y)
+                          (* upper-x upper-y)))
+          
+          ((and (both-pos? x) (both-neg? y))
+           (make-interval (* upper-x lower-y)
+                          (* lower-x upper-y)))
+          
+          ((and (both-pos? x) (neg-pos? y))
+           (make-interval (* upper-x upper-y)
+                          (* upper-x lower-y)))
+          
+          ((and (both-neg? x) (both-neg? y))
+           (make-interval (* upper-x upper-y)
+                          (* lower-x lower-y)))
+          
+          ((and (both-neg? x) (both-pos? y))
+           (make-interval (* lower-x upper-y)
+                          (* upper-x lower-y)))
+          
+          ((and (both-neg? x) (neg-pos? y))
+           (make-interval (* lower-x upper-y)
+                          (* lower-x lower-y)))
+          
+          ((and (neg-pos? x) (both-pos? y))
+           (make-interval (* lower-x upper-y)
+                          (* upper-x upper-y)))
+          
+          ((and (neg-pos? x) (both-neg? y))
+           (make-interval (* lower-x lower-y)
+                          (* upper-x lower-y)))
+
+          ((and (neg-pos? x) (neg-pos? x))
+           ;; oops! needs more than two times multiplication 
+           ;; x = (-2, 4)   |  (-2,  4)
+           ;; y = (-2, 4)   |  (-20, 1)
+           ;; the two different situation requires actually over two times mul.
+           (make-interval (min (* lower-x upper-y)
+                               (* upper-x lower-y))
+                          (max (* upper-x upper-y)
+                               (* lower-x lower-y)))))))
+
+;;; tests begin
+
+(let ((both-neg (make-interval -2 -1))
+      (both-pos (make-interval  1  2))
+      (neg-pos  (make-interval -2  4))
+      (neg-pos1 (make-interval -20 1)))
+  (define (equal-interval? i1 i2)
+    (and (= (lower-bound i1) (lower-bound i2))
+         (= (upper-bound i1) (upper-bound i2))))
+  (define (testing x y)
+    (assert-equal equal-interval?
+                  (mul-interval x y)
+                  (origin-mul-interval x y)))
+  (begin
+    (testing both-neg both-neg)
+    (testing both-neg both-pos)
+    (testing both-neg neg-pos)
+    (testing both-pos both-neg)
+    (testing both-pos both-pos)
+    (testing both-pos neg-pos)
+    (testing neg-pos both-neg)
+    (testing neg-pos both-pos)
+    (testing neg-pos neg-pos)
+    (testing neg-pos neg-pos1)))
