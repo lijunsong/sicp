@@ -17,6 +17,12 @@
 (define (assertequal? e1 e2)
   (assert-equal equal? e1 e2))
 
+(define (asserttrue e)
+  (asserteq? #t e))
+
+(define (assertfalse e)
+  (asserteq? #f e))
+
 ;; TODO: what about set? 
 
 ;; f can be a function used to compare the ele to the elements in lst

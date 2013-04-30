@@ -16,4 +16,12 @@
                        m))))
   dispatch)
 
-(define acc (make-account 100 'secret-password))
+;;; tests begin
+(load "../testframe.scm")
+
+(let ((acc (make-account 100 'pwd)))
+  (assert= ((acc 'pwd 'deposit) 100) 200)
+  (assert= ((acc 'pwd 'withdraw) 200) 0)
+  (assertequal? ((acc 'pwd 'withdraw) 100) "Insufficient funds")
+  (assertequal? ((acc 'pwd1 'deposit) 100) "Incorrect password")
+  (assert= ((acc 'pwd 'deposit) 100) 100))
