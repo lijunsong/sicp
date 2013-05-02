@@ -4,6 +4,13 @@
       (* (term a)
          (product term (next a) next b))))
 
+;; product tests begin
+(load "../testframe.scm")
+(assert= (product (lambda (x) x)
+                  1
+                  (lambda (x) (+ 1 x))
+                  10)
+         (* 2 3 4 5 6 7 8 9 10))
 
 ;;; 1. factorial
 (define (factorial n)
@@ -12,7 +19,7 @@
   (product identity 1 inc n))
 
 ;; 1. tests begin
-(load "../testframe.scm")
+
 (assert= (factorial 1) 1)
 (assert= (factorial 4) 24)
 
@@ -40,12 +47,6 @@
               (* result (item c)))))
   (iter a 1))
 
-;; redefine the factorial procedure for testing
-(define (factorial/testing n)
-  (define (identity x) x)
-  (define (inc x) (+ 1 x))
-  (product/iter identity 1 inc n))
-;; test the iterative version of factorial procedure
-(assert= (factorial/testing 1) 1)
+
 (assert= (factorial/testing 4) 24)
 
