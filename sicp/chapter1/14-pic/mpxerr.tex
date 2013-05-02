@@ -1,0 +1,54 @@
+\def\stk#1#2{$\displaystyle{\matrix{#1\cr#2\cr}}$} 
+\gdef\mpxshipout{\shipout\hbox\bgroup
+  \setbox0=\hbox\bgroup}
+\gdef\stopmpxshipout{\egroup  \dimen0=\ht0 \advance\dimen0\dp0
+  \dimen1=\ht0 \dimen2=\dp0
+  \setbox0=\hbox\bgroup
+    \box0
+    \ifnum\dimen0>0 \vrule width1sp height\dimen1 depth\dimen2 
+    \else \vrule width1sp height1sp depth0sp\relax
+    \fi\egroup
+  \ht0=0pt \dp0=0pt \box0 \egroup}
+\mpxshipout% line 35 ./countchange.mp
+\stk{amount:11}{kind:5}%
+\stopmpxshipout
+\mpxshipout% line 36 ./countchange.mp
+\stk{11}{kind 4}%
+\stopmpxshipout
+\mpxshipout% line 37 ./countchange.mp
+-39%
+\stopmpxshipout
+\mpxshipout% line 38 ./countchange.mp
+\stk{11}{kind 3}%
+\stopmpxshipout
+\mpxshipout% line 39 ./countchange.mp
+-14%
+\stopmpxshipout
+\mpxshipout% line 40 ./countchange.mp
+\stk{11}{kind 2}%
+\stopmpxshipout
+\mpxshipout% line 41 ./countchange.mp
+\stk{1}{kind 3}%
+\stopmpxshipout
+\mpxshipout% line 42 ./countchange.mp
+\stk{11}{kind 1}%
+\stopmpxshipout
+\mpxshipout% line 43 ./countchange.mp
+\stk{6}{kind 2}%
+\stopmpxshipout
+\mpxshipout% line 55 ./countchange.mp
+11-50%
+\stopmpxshipout
+\mpxshipout% line 57 ./countchange.mp
+11-25%
+\stopmpxshipout
+\mpxshipout% line 59 ./countchange.mp
+11-10%
+\stopmpxshipout
+\mpxshipout% line 61 ./countchange.mp
+11-5%
+\stopmpxshipout
+\mpxshipout% line 63 ./countchange.mp
+\strut $\vdot$%
+\stopmpxshipout
+\end{document}
