@@ -1,4 +1,3 @@
-
 (define (make-table)
   (let ((local-table (list '*table*)))
     (define (lookup key-1 key-2)
@@ -30,7 +29,10 @@
     dispatch))
 
 (define operation-table (make-table))
-(define get (operation-table 'lookup-proc))
+(define get
+  (begin
+    (display (operation-table 'lookup-proc))
+    (operation-table 'lookup-proc)))
 (define put (operation-table 'insert-proc!))
 
 

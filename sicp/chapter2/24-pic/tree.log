@@ -1,0 +1,22 @@
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=mptopdf 2012.6.30)  3 MAY 2013 20:17
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**\relax tree.1
+ (./tree.1{/usr/local/texlive/2012/texmf-var/fonts/map/pdftex/updmap/pdftex.map
+}) [1] 
+Here is how much of TeX's memory you used:
+ 28 strings out of 496721
+ 258 string characters out of 3201270
+ 4016057 words of memory out of 7001264
+ 1676 multiletter control sequences out of 15000+200000
+ 307 words of font info for 1 font, out of 3000000 for 9000
+ 0 hyphenation exceptions out of 8191
+ 10i,3n,7p,106b,228s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.
+pfb>
+Output written on tree.pdf (1 page, 10168 bytes).
+PDF statistics:
+ 12 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 7 words of extra memory for PDF output out of 10000 (max. 10000000)
+

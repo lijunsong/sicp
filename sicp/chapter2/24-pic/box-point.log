@@ -1,0 +1,23 @@
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=mptopdf 2012.6.30)  3 MAY 2013 20:08
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**\relax box-point.1
+ (./box-point.1{/usr/local/texlive/2012/texmf-var/fonts/map/pdftex/updmap/pdfte
+x.map}) [1] 
+Here is how much of TeX's memory you used:
+ 35 strings out of 496721
+ 336 string characters out of 3201270
+ 4019023 words of memory out of 7004230
+ 1682 multiletter control sequences out of 15000+200000
+ 564 words of font info for 2 fonts, out of 3000000 for 9000
+ 0 hyphenation exceptions out of 8191
+ 10i,3n,7p,108b,234s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mr10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cms
+y10.pfb>
+Output written on box-point.pdf (1 page, 18424 bytes).
+PDF statistics:
+ 16 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 7 words of extra memory for PDF output out of 10000 (max. 10000000)
+

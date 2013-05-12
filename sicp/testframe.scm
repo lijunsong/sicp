@@ -67,7 +67,7 @@
 
 ;;; main assert exception procedure
 ; (string or expr * string or expr) =>
-; note: the string can be part of the irritants !
+; note: the string can be part of the string of irritants !
 (define-syntax assert/exn
   (syntax-rules ()
     ((assert/exn e1 e2)
@@ -86,7 +86,7 @@
               (assertin maybe-irritant2
                         maybe-irritant1
                         (lambda (x y)
-                          (or (substring? x y)
+                          (or (substring? x y) ;TODO: x or y may not be necessarily a string!
                               (substring? y x)))))
              ((pair? maybe-irritant2) ; which means maybe-irritant1 is a str
               (assertin maybe-irritant1 maybe-irritant2))

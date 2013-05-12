@@ -7,7 +7,7 @@
 
 (define (multiplicand m)
   (if (> (length m) 3)
-      (cons'* (cddr m))
+      (cons '* (cddr m))
       (caddr m)))
 
 
