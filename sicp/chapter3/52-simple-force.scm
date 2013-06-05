@@ -1,11 +1,28 @@
+;; cons-stream implementation
+
+(define-syntax delay-1
+  (syntax-rules ()
+    ((delay-1 x)
+     (lambda () x))))
+
+(define (force-1 delayed)
+  (delayed))
+
+(define (stream-car stream) (car stream))
+
+(define (stream-cdr stream) (force-1 (cdr stream)))
+
+(define-syntax cons-stream
+  (syntax-rules ()
+    ((cons-stream a b)
+     (cons a (delay-1 b)))))
+
 (define (stream-ref s n)
   (if (= n 0)
       (stream-car s)
       (stream-ref (stream-cdr s) (- n 1))))
 
 (define (stream-map proc s)
-  ;(display "\nstream-map:")
-  ;(display proc) (display " ") (display s) (newline)
   (if (stream-null? s)
       the-empty-stream
       (cons-stream (proc (stream-car s))
@@ -21,33 +38,11 @@
 (define (display-stream s)
   (stream-for-each display-line s))
 
-(define (display-infinite-stream s num)
-  (if (> num 0)
-      (begin
-        (display-line (stream-car s))
-        (display-infinite-stream (stream-cdr s) (- num 1)))))
-
 (define (display-line x)
   (newline)
   (display x))
 
-;; cons-stream implementation
-
-(define (stream-car stream) (car stream))
-
-(define (stream-cdr stream) (force (cdr stream)))
-
-(define-syntax cons-stream
-  (syntax-rules ()
-    ((cons-stream a b)
-     (cons a (delay b)))))
-
-
-(define the-empty-stream '())
-
-;; printing tracing information
 (define (stream-enumerate-interval low high)
-  ;(display "\nstream-enumerate-interval:") (display low) (display " ") (display high)
   (if (> low high)
       the-empty-stream
       (cons-stream
@@ -60,4 +55,41 @@
          (cons-stream (stream-car stream)
                       (stream-filter pred (stream-cdr stream))))
         (else (stream-filter pred (stream-cdr stream)))))
+
+
+(define sum 0)
+
+(define (accum x)
+  (set! sum (+ x sum))
+  sum)
+
+(define seq (stream-map accum (stream-enumerate-interval 1 20)))
+; seq: (1 . procedure)
+; sum: 1
+
+(define y (stream-filter even? seq))
+; seq: (1 . procedure)
+; sum: 6
+;   y: (6 . procedure)
+
+(define z (stream-filter (lambda (x) (= (remainder x 5) 0))
+                         seq))
+; seq: (1 . procedure)
+; sum: 15
+;   z: (15 . procedure)
+
+(stream-ref y 7)
+; => 162
+; seq: (1 . procedure)
+; sum: 162
+
+
+(display-stream z)
+; seq: (1 . procedure)
+;15
+;180
+;230
+;305
+
+
 

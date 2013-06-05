@@ -29,10 +29,7 @@
     dispatch))
 
 (define operation-table (make-table))
-(define get
-  (begin
-    (display (operation-table 'lookup-proc))
-    (operation-table 'lookup-proc)))
+(define get (operation-table 'lookup-proc))
 (define put (operation-table 'insert-proc!))
 
 
