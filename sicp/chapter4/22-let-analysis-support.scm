@@ -45,6 +45,7 @@
         (let-vals (let-bindings exp))))
 
 (define (analyze-let exp)
+  (dp "analyze-let: " exp)
   (analyze (let->combination exp)))
 
 ;;; end 2.
@@ -56,6 +57,7 @@
     (lambda (env) qval)))
 
 (define (analyze-variable exp)
+  (dp "analyze-variable: " exp)
   (lambda (env) (lookup-variable-value exp env)))
 
 (define (analyze-assignment exp)
@@ -64,7 +66,9 @@
     (lambda (env)
       (set-variable-value! var (vproc env) env)
       'ok)))
+
 (define (analyze-definition exp)
+  (dp "analyze-definition: " exp)
   (let ((var (definition-variable exp))
         (vproc (analyze (definition-value exp))))
     (lambda (env)
@@ -81,11 +85,13 @@
           (aproc env)))))
 
 (define (analyze-lambda exp)
+  (dp "analyze-lambda: " exp)
   (let ((vars (lambda-parameters exp))
         (bproc (analyze-sequence (lambda-body exp))))
     (lambda (env) (make-procedure vars bproc env))))
 
 (define (analyze-sequence exps)
+  (dp "analyze-sequence: " exps)
   (define (sequentially proc1 proc2)
     (lambda (env) (proc1 env) (proc2 env)))
   (define (loop first-proc rest-procs)
@@ -99,6 +105,7 @@
     (loop (car procs) (cdr procs))))
 
 (define (analyze-application exp)
+  (dp "analyze-application: " exp)
   (let ((fproc (analyze (operator exp)))
         (aprocs (map analyze (operands exp))))
     (lambda (env)
@@ -122,9 +129,12 @@
 
 
 ;;; tests begin
+(load "../testframe.scm")
+
 (let ((test-env (setup-environment)))
   (begin
     (assert= (eval '(let ((x 1) (y 1))
+                      (+ x y)
                       (+ x y)) test-env)
              2)
     (assert= (eval '(let ((x 1))
@@ -137,3 +147,5 @@
                       x) test-env)
              1)
     ))
+
+

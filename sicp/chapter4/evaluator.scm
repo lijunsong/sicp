@@ -1,3 +1,4 @@
+
 (define debug true)
 (define (dp . strs)
   (if debug (begin (newline) (for-each display strs) (newline))))
@@ -173,8 +174,6 @@
 (define (first-operand ops) (car ops))
 (define (rest-operands ops) (cdr ops))
 
-
-
 ;;; testing of predicates
 (define (true? x)
   (not (eq? x false)))
@@ -200,8 +199,14 @@
   (list (list 'car car)
         (list 'cdr cdr)
         (list 'cons cons)
+        (list 'list list)
         (list 'null? null?)
+        (list 'not not)
         (list '= =)
+        (list '> >)
+        (list '< <)
+        (list 'abs abs)
+        (list '- -)
         (list '+ +)))
 (define (primitive-procedure-names)
   (map car
