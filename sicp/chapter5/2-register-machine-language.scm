@@ -1,3 +1,17 @@
+; TODO: declare the register and operation!
+(data-path
+ (registers
+  ((name counter)
+   ;...
+   ))
+ (operations
+  ((name +)
+   ())
+  ((name *)
+   ())
+  ((name >)
+   ())))
+
 (constroller
     (assign product (const 1))
     (assign counter (const 1))
