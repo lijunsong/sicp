@@ -38,6 +38,7 @@
   (cdr inst))
 
 (load "../testframe.scm")
+; NOTE: '((label1 ((inst1 arg)) ...)) the reason why use ((inst1 arg)) is that the instruction procedure will be stored in cdr of ((inst1 arg)) later 
 (let ((text
        '(label1
          (inst1 arg)
