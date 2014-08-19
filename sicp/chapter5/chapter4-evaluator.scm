@@ -1,8 +1,4 @@
 
-(define debug true)
-(define (dp . strs)
-  (if debug (begin (newline) (for-each display strs) (newline))))
-
 (define (eval exp env)
   (cond ((self-evaluating? exp) exp)
         ((variable? exp) (lookup-variable-value exp env))
@@ -208,6 +204,7 @@
         (list '< <)
         (list 'abs abs)
         (list '- -)
+        (list '* *)
         (list '+ +)))
 (define (primitive-procedure-names)
   (map car
